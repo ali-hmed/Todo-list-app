@@ -1,5 +1,5 @@
 import { Link, Stack } from 'expo-router';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 export default function NotFoundScreen() {
   return (
@@ -10,7 +10,7 @@ export default function NotFoundScreen() {
           Screen Not Found
         </Text>
         <Text className="text-base text-slate-500 dark:text-slate-400 text-center mb-6">
-          This page doesn't exist.
+          This page doesn&apos;t exist.
         </Text>
         <Link
           href="/(tabs)"
