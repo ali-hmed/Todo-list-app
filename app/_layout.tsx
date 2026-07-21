@@ -5,23 +5,21 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { TodoProvider } from '@/src/context/TodoContext';
+import { ThemeProvider as AppThemeProvider } from '@/src/context/ThemeContext';
 import { InMemoryTodoRepository } from '@/src/repository/InMemoryTodoRepository';
-import { useMemo } from 'react';
 
 export const unstable_settings = {
   anchor: '(tabs)',
 };
 
-// Create the repository instance outside the component so it is stable
-// across re-renders. In a future phase, this will be replaced with
-// an AsyncStorageTodoRepository (or similar) injected here.
 const repository = new InMemoryTodoRepository();
 
-export default function RootLayout() {
+function RootLayoutNav() {
   const colorScheme = useColorScheme();
+  const isDark = colorScheme === 'dark';
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={isDark ? DarkTheme : DefaultTheme}>
       <TodoProvider repository={repository}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -30,22 +28,30 @@ export default function RootLayout() {
             options={{
               title: 'New Todo',
               presentation: 'modal',
-              headerStyle: { backgroundColor: colorScheme === 'dark' ? '#0f172a' : '#ffffff' },
-              headerTintColor: colorScheme === 'dark' ? '#f8fafc' : '#0f172a',
+              headerStyle: { backgroundColor: isDark ? '#0f172a' : '#ffffff' },
+              headerTintColor: isDark ? '#f8fafc' : '#0f172a',
             }}
           />
           <Stack.Screen
             name="todo/[id]"
             options={{
               title: 'Todo Details',
-              headerStyle: { backgroundColor: colorScheme === 'dark' ? '#0f172a' : '#ffffff' },
-              headerTintColor: colorScheme === 'dark' ? '#f8fafc' : '#0f172a',
+              headerStyle: { backgroundColor: isDark ? '#0f172a' : '#ffffff' },
+              headerTintColor: isDark ? '#f8fafc' : '#0f172a',
             }}
           />
           <Stack.Screen name="+not-found" options={{ title: 'Not Found' }} />
         </Stack>
-        <StatusBar style="auto" />
+        <StatusBar style={isDark ? 'light' : 'dark'} />
       </TodoProvider>
     </ThemeProvider>
+  );
+}
+
+export default function RootLayout() {
+  return (
+    <AppThemeProvider>
+      <RootLayoutNav />
+    </AppThemeProvider>
   );
 }

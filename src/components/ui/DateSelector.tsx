@@ -255,7 +255,7 @@ export function DateSelector({ value, onChange, label = 'Due Date' }: DateSelect
                 onPress={handlePrevMonth}
                 className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800"
               >
-                <Ionicons name="chevron-back" size={20} color="#334155" />
+                <Ionicons name="chevron-back" size={20} color="#64748b" />
               </Pressable>
 
               <Text className="text-base font-semibold text-slate-800 dark:text-slate-200">
@@ -266,9 +266,10 @@ export function DateSelector({ value, onChange, label = 'Due Date' }: DateSelect
                 onPress={handleNextMonth}
                 className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800"
               >
-                <Ionicons name="chevron-forward" size={20} color="#334155" />
+                <Ionicons name="chevron-forward" size={20} color="#64748b" />
               </Pressable>
             </View>
+
 
             {/* Weekday Header */}
             <View className="flex-row mb-2">
