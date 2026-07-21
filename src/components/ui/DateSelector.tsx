@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, Pressable, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useColorScheme } from '../../../hooks/use-color-scheme';
 import { dateToISOString, formatDueDate } from '../../utils/dateUtils';
 
 interface DateSelectorProps {
@@ -16,6 +17,9 @@ const MONTH_NAMES = [
 ];
 
 export function DateSelector({ value, onChange, label = 'Due Date' }: DateSelectorProps) {
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === 'dark';
+
   const [modalVisible, setModalVisible] = useState(false);
   const [viewDate, setViewDate] = useState(() => value || new Date());
 
@@ -90,9 +94,11 @@ export function DateSelector({ value, onChange, label = 'Due Date' }: DateSelect
     ? `${dateToISOString(value)} (${formatDueDate(dateToISOString(value))})`
     : '';
 
+  const activeIconColor = value ? (isDark ? '#ffffff' : '#000000') : '#64748b';
+
   return (
     <View className="gap-2">
-      <Text className="text-sm font-medium text-slate-700 dark:text-slate-300">
+      <Text className="text-sm font-medium text-slate-700 dark:text-zinc-300">
         {label}
       </Text>
 
@@ -107,21 +113,21 @@ export function DateSelector({ value, onChange, label = 'Due Date' }: DateSelect
           accessibilityLabel={`Select due date. Current selection: ${displayDateText || 'None'}`}
           className={`flex-1 flex-row items-center justify-between px-3.5 py-3 rounded-xl border ${
             value
-              ? 'bg-brand/5 dark:bg-brand/10 border-brand'
-              : 'bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700'
+              ? 'bg-slate-100 dark:bg-zinc-900 border-slate-900 dark:border-white'
+              : 'bg-white dark:bg-zinc-900 border-slate-300 dark:border-zinc-800'
           }`}
         >
           <View className="flex-row items-center gap-2.5 flex-1 pr-2">
             <Ionicons
               name="calendar-outline"
               size={20}
-              color={value ? '#2563eb' : '#64748b'}
+              color={activeIconColor}
             />
             <Text
-              className={`text-base font-medium ${
+              className={`text-base ${
                 value
-                  ? 'text-brand dark:text-blue-400 font-semibold'
-                  : 'text-slate-400 dark:text-slate-500'
+                  ? 'text-slate-900 dark:text-white font-bold'
+                  : 'text-slate-400 dark:text-zinc-500 font-medium'
               }`}
               numberOfLines={1}
             >
@@ -131,7 +137,7 @@ export function DateSelector({ value, onChange, label = 'Due Date' }: DateSelect
           <Ionicons
             name="chevron-down"
             size={18}
-            color={value ? '#2563eb' : '#94a3b8'}
+            color={activeIconColor}
           />
         </Pressable>
 
@@ -141,9 +147,9 @@ export function DateSelector({ value, onChange, label = 'Due Date' }: DateSelect
             hitSlop={8}
             accessibilityRole="button"
             accessibilityLabel="Clear due date"
-            className="p-3 rounded-xl bg-slate-100 dark:bg-slate-800 items-center justify-center border border-slate-200 dark:border-slate-700"
+            className="p-3 rounded-xl bg-slate-100 dark:bg-zinc-900 items-center justify-center border border-slate-200 dark:border-zinc-800"
           >
-            <Ionicons name="close" size={18} color="#64748b" />
+            <Ionicons name="close" size={18} color={isDark ? '#a1a1aa' : '#64748b'} />
           </Pressable>
         )}
       </View>
@@ -154,15 +160,15 @@ export function DateSelector({ value, onChange, label = 'Due Date' }: DateSelect
           onPress={handleSelectToday}
           className={`px-3 py-1.5 rounded-lg border ${
             isTodaySelected
-              ? 'bg-brand border-brand'
-              : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700'
+              ? 'bg-slate-900 dark:bg-white border-slate-900 dark:border-white'
+              : 'bg-slate-100 dark:bg-zinc-900 border-slate-200 dark:border-zinc-800'
           }`}
         >
           <Text
-            className={`text-xs font-medium ${
+            className={`text-xs ${
               isTodaySelected
-                ? 'text-white font-semibold'
-                : 'text-slate-700 dark:text-slate-300'
+                ? 'text-white dark:text-slate-950 font-bold'
+                : 'text-slate-700 dark:text-zinc-300 font-medium'
             }`}
           >
             Today
@@ -173,15 +179,15 @@ export function DateSelector({ value, onChange, label = 'Due Date' }: DateSelect
           onPress={handleSelectTomorrow}
           className={`px-3 py-1.5 rounded-lg border ${
             isTomorrowSelected
-              ? 'bg-brand border-brand'
-              : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700'
+              ? 'bg-slate-900 dark:bg-white border-slate-900 dark:border-white'
+              : 'bg-slate-100 dark:bg-zinc-900 border-slate-200 dark:border-zinc-800'
           }`}
         >
           <Text
-            className={`text-xs font-medium ${
+            className={`text-xs ${
               isTomorrowSelected
-                ? 'text-white font-semibold'
-                : 'text-slate-700 dark:text-slate-300'
+                ? 'text-white dark:text-slate-950 font-bold'
+                : 'text-slate-700 dark:text-zinc-300 font-medium'
             }`}
           >
             Tomorrow
@@ -192,15 +198,15 @@ export function DateSelector({ value, onChange, label = 'Due Date' }: DateSelect
           onPress={handleSelectNextWeek}
           className={`px-3 py-1.5 rounded-lg border ${
             isNextWeekSelected
-              ? 'bg-brand border-brand'
-              : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700'
+              ? 'bg-slate-900 dark:bg-white border-slate-900 dark:border-white'
+              : 'bg-slate-100 dark:bg-zinc-900 border-slate-200 dark:border-zinc-800'
           }`}
         >
           <Text
-            className={`text-xs font-medium ${
+            className={`text-xs ${
               isNextWeekSelected
-                ? 'text-white font-semibold'
-                : 'text-slate-700 dark:text-slate-300'
+                ? 'text-white dark:text-slate-950 font-bold'
+                : 'text-slate-700 dark:text-zinc-300 font-medium'
             }`}
           >
             Next Week
@@ -212,10 +218,10 @@ export function DateSelector({ value, onChange, label = 'Due Date' }: DateSelect
             setViewDate(value || new Date());
             setModalVisible(true);
           }}
-          className="px-3 py-1.5 rounded-lg border bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 flex-row items-center gap-1"
+          className="px-3 py-1.5 rounded-lg border bg-slate-100 dark:bg-zinc-900 border-slate-200 dark:border-zinc-800 flex-row items-center gap-1"
         >
-          <Ionicons name="calendar-sharp" size={12} color="#64748b" />
-          <Text className="text-xs font-medium text-slate-700 dark:text-slate-300">
+          <Ionicons name="calendar-sharp" size={12} color={isDark ? '#a1a1aa' : '#64748b'} />
+          <Text className="text-xs font-medium text-slate-700 dark:text-zinc-300">
             Pick Date…
           </Text>
         </Pressable>
@@ -230,11 +236,11 @@ export function DateSelector({ value, onChange, label = 'Due Date' }: DateSelect
       >
         <Pressable
           onPress={() => setModalVisible(false)}
-          className="flex-1 bg-black/50 justify-center items-center p-4"
+          className="flex-1 bg-black/60 justify-center items-center p-4"
         >
           <Pressable
             onPress={(e) => e.stopPropagation()}
-            className="w-full max-w-sm bg-white dark:bg-slate-900 rounded-2xl p-5 shadow-xl border border-slate-200 dark:border-slate-800"
+            className="w-full max-w-sm bg-white dark:bg-zinc-950 rounded-2xl p-5 shadow-2xl border border-slate-200 dark:border-zinc-800"
           >
             {/* Modal Header */}
             <View className="flex-row items-center justify-between mb-4">
@@ -243,9 +249,9 @@ export function DateSelector({ value, onChange, label = 'Due Date' }: DateSelect
               </Text>
               <Pressable
                 onPress={() => setModalVisible(false)}
-                className="p-1 rounded-full bg-slate-100 dark:bg-slate-800"
+                className="p-1.5 rounded-full bg-slate-100 dark:bg-zinc-900"
               >
-                <Ionicons name="close" size={20} color="#64748b" />
+                <Ionicons name="close" size={18} color={isDark ? '#a1a1aa' : '#64748b'} />
               </Pressable>
             </View>
 
@@ -253,30 +259,29 @@ export function DateSelector({ value, onChange, label = 'Due Date' }: DateSelect
             <View className="flex-row items-center justify-between mb-4 px-1">
               <Pressable
                 onPress={handlePrevMonth}
-                className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800"
+                className="p-2 rounded-lg bg-slate-100 dark:bg-zinc-900"
               >
-                <Ionicons name="chevron-back" size={20} color="#64748b" />
+                <Ionicons name="chevron-back" size={20} color={isDark ? '#ffffff' : '#000000'} />
               </Pressable>
 
-              <Text className="text-base font-semibold text-slate-800 dark:text-slate-200">
+              <Text className="text-base font-bold text-slate-900 dark:text-white">
                 {MONTH_NAMES[month]} {year}
               </Text>
 
               <Pressable
                 onPress={handleNextMonth}
-                className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800"
+                className="p-2 rounded-lg bg-slate-100 dark:bg-zinc-900"
               >
-                <Ionicons name="chevron-forward" size={20} color="#64748b" />
+                <Ionicons name="chevron-forward" size={20} color={isDark ? '#ffffff' : '#000000'} />
               </Pressable>
             </View>
-
 
             {/* Weekday Header */}
             <View className="flex-row mb-2">
               {WEEKDAYS.map((wd) => (
                 <Text
                   key={wd}
-                  className="flex-1 text-center text-xs font-bold text-slate-400 dark:text-slate-500"
+                  className="flex-1 text-center text-xs font-bold text-slate-400 dark:text-zinc-500"
                 >
                   {wd}
                 </Text>
@@ -301,19 +306,19 @@ export function DateSelector({ value, onChange, label = 'Due Date' }: DateSelect
                     <View
                       className={`w-9 h-9 rounded-full items-center justify-center ${
                         isSelected
-                          ? 'bg-brand shadow'
+                          ? 'bg-slate-900 dark:bg-white shadow'
                           : isTodayCell
-                          ? 'border border-brand bg-brand/10'
+                          ? 'border-2 border-slate-900 dark:border-white bg-slate-100 dark:bg-zinc-900'
                           : ''
                       }`}
                     >
                       <Text
                         className={`text-sm ${
                           isSelected
-                            ? 'text-white font-bold'
+                            ? 'text-white dark:text-slate-950 font-bold'
                             : isTodayCell
-                            ? 'text-brand font-bold'
-                            : 'text-slate-800 dark:text-slate-200 font-medium'
+                            ? 'text-slate-900 dark:text-white font-bold'
+                            : 'text-slate-800 dark:text-zinc-200 font-medium'
                         }`}
                       >
                         {cell.day}
@@ -325,7 +330,7 @@ export function DateSelector({ value, onChange, label = 'Due Date' }: DateSelect
             </View>
 
             {/* Bottom Actions */}
-            <View className="flex-row items-center justify-between mt-5 pt-3 border-t border-slate-100 dark:border-slate-800">
+            <View className="flex-row items-center justify-between mt-5 pt-3 border-t border-slate-100 dark:border-zinc-800">
               <Pressable
                 onPress={() => {
                   handleClear();
@@ -333,14 +338,14 @@ export function DateSelector({ value, onChange, label = 'Due Date' }: DateSelect
                 }}
                 className="px-3 py-2 rounded-lg"
               >
-                <Text className="text-sm font-medium text-danger">Clear Date</Text>
+                <Text className="text-sm font-semibold text-danger">Clear Date</Text>
               </Pressable>
 
               <Pressable
                 onPress={() => setModalVisible(false)}
-                className="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800"
+                className="px-4 py-2 rounded-xl bg-slate-200 dark:bg-zinc-800"
               >
-                <Text className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                <Text className="text-sm font-semibold text-slate-700 dark:text-zinc-300">
                   Cancel
                 </Text>
               </Pressable>

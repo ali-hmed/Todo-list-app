@@ -1,5 +1,6 @@
 import React from 'react';
 import { ActivityIndicator, Pressable, Text, View } from 'react-native';
+import { useColorScheme } from '../../../hooks/use-color-scheme';
 
 type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
 type ButtonSize = 'sm' | 'md' | 'lg';
@@ -19,19 +20,19 @@ interface ButtonProps {
 
 const variantStyles: Record<ButtonVariant, { container: string; text: string }> = {
   primary: {
-    container: 'bg-brand active:bg-brand-dark',
-    text: 'text-white font-semibold',
+    container: 'bg-slate-900 dark:bg-white active:opacity-90 shadow-sm border border-slate-900 dark:border-white',
+    text: 'text-white dark:text-slate-950 font-bold',
   },
   secondary: {
-    container: 'bg-slate-100 dark:bg-slate-700 active:bg-slate-200 dark:active:bg-slate-600 border border-slate-300 dark:border-slate-600',
-    text: 'text-slate-900 dark:text-white font-semibold',
+    container: 'bg-slate-100 dark:bg-zinc-900 active:bg-slate-200 dark:active:bg-zinc-800 border border-slate-200 dark:border-zinc-800',
+    text: 'text-slate-900 dark:text-zinc-100 font-semibold',
   },
   ghost: {
-    container: 'bg-transparent active:bg-slate-100 dark:active:bg-slate-800',
-    text: 'text-brand dark:text-brand-light font-semibold',
+    container: 'bg-transparent active:bg-slate-100 dark:active:bg-zinc-800',
+    text: 'text-slate-900 dark:text-white font-semibold',
   },
   danger: {
-    container: 'bg-danger active:bg-red-600',
+    container: 'bg-red-600 dark:bg-red-500 active:bg-red-700',
     text: 'text-white font-semibold',
   },
 };
@@ -54,9 +55,23 @@ export function Button({
   className = '',
   leftIcon,
 }: ButtonProps) {
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === 'dark';
+
   const isDisabled = disabled || loading;
   const { container, text } = variantStyles[variant];
   const { container: sizeContainer, text: sizeText } = sizeStyles[size];
+
+  const spinnerColor =
+    variant === 'primary'
+      ? isDark
+        ? '#000000'
+        : '#ffffff'
+      : variant === 'danger'
+      ? '#ffffff'
+      : isDark
+      ? '#ffffff'
+      : '#000000';
 
   return (
     <Pressable
@@ -71,10 +86,7 @@ export function Button({
       } ${className}`}
     >
       {loading ? (
-        <ActivityIndicator
-          size="small"
-          color={variant === 'primary' || variant === 'danger' ? '#fff' : '#7c3aed'}
-        />
+        <ActivityIndicator size="small" color={spinnerColor} />
       ) : (
         leftIcon && <View>{leftIcon}</View>
       )}

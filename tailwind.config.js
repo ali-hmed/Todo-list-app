@@ -1,45 +1,42 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  // Scan all app and src files for class names
   content: [
     './app/**/*.{js,jsx,ts,tsx}',
     './src/**/*.{js,jsx,ts,tsx}',
     './components/**/*.{js,jsx,ts,tsx}',
   ],
   presets: [require('nativewind/preset')],
-  // "media" automatically respects the device system color scheme (light/dark)
   darkMode: 'media',
   theme: {
     extend: {
       colors: {
-        // Brand palette
+        // High-contrast monochrome brand palette
         brand: {
-          DEFAULT: '#7c3aed', // violet-700 — primary actions
-          light: '#a78bfa',   // violet-400 — pressed/hover states
-          dark: '#5b21b6',    // violet-800 — deep accent
+          DEFAULT: '#09090b', // Pitch Black in light mode
+          light: '#71717a',   // Neutral zinc
+          dark: '#ffffff',    // Pure White in dark mode
         },
-        // Semantic colors
+        // Semantic colors (refined neutrals/accents)
         success: {
-          DEFAULT: '#10b981', // emerald-500
-          light: '#34d399',   // emerald-400 (dark mode)
+          DEFAULT: '#10b981',
+          light: '#34d399',
         },
         warning: {
-          DEFAULT: '#f59e0b', // amber-500
-          light: '#fbbf24',   // amber-400 (dark mode)
+          DEFAULT: '#f59e0b',
+          light: '#fbbf24',
         },
         danger: {
-          DEFAULT: '#ef4444', // rose-500
-          light: '#f87171',   // rose-400 (dark mode)
+          DEFAULT: '#ef4444',
+          light: '#f87171',
         },
-        // App surfaces — light mode
+        // Surfaces — true pitch dark mode and crisp light mode
         surface: {
           DEFAULT: '#ffffff',
-          elevated: '#f8fafc', // slate-50
+          elevated: '#f4f4f5', // zinc-100
         },
-        // App surfaces — dark mode (used with dark: prefix)
         'surface-dark': {
-          DEFAULT: '#1e293b', // slate-800
-          elevated: '#334155', // slate-700
+          DEFAULT: '#000000', // Pitch Black (true dark mode like GitHub/Vercel/Linear)
+          elevated: '#18181b', // Zinc-900
         },
       },
       fontFamily: {
@@ -54,7 +51,7 @@ module.exports = {
         '3xl': '1.5rem',
       },
       minHeight: {
-        touch: '44px', // minimum accessible touch target
+        touch: '44px',
       },
       minWidth: {
         touch: '44px',

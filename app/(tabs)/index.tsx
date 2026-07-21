@@ -1,13 +1,17 @@
 import React, { useCallback } from 'react';
-import { Alert, Pressable, SafeAreaView, Text, View } from 'react-native';
+import { Pressable, SafeAreaView, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useTodoContext } from '@/src/context/TodoContext';
 import { TodoList } from '@/src/features/todos/components/TodoList';
 import { TodoListHeader } from '@/src/features/todos/components/TodoListHeader';
 
 export default function TodosScreen() {
   const router = useRouter();
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === 'dark';
+
   const {
     filteredTodos,
     filter,
@@ -39,7 +43,7 @@ export default function TodosScreen() {
   ) : null;
 
   return (
-    <SafeAreaView className="flex-1 bg-slate-50 dark:bg-slate-950">
+    <SafeAreaView className="flex-1 bg-slate-50 dark:bg-black">
       {errorBanner}
 
       <TodoListHeader
@@ -63,10 +67,10 @@ export default function TodosScreen() {
         accessibilityRole="button"
         accessibilityLabel="Create new todo"
         accessibilityHint="Opens the create todo screen"
-        className="absolute bottom-6 right-6 w-14 h-14 rounded-full bg-brand shadow-lg items-center justify-center active:bg-brand-dark"
+        className="absolute bottom-6 right-6 w-14 h-14 rounded-full bg-slate-900 dark:bg-white shadow-xl items-center justify-center active:opacity-90 border border-slate-800 dark:border-slate-200"
         style={{ elevation: 6 }}
       >
-        <Ionicons name="add" size={28} color="white" />
+        <Ionicons name="add" size={28} color={isDark ? '#000000' : '#ffffff'} />
       </Pressable>
     </SafeAreaView>
   );

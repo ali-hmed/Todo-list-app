@@ -14,12 +14,24 @@ export const unstable_settings = {
 
 const repository = new InMemoryTodoRepository();
 
+// Custom Dark navigation theme with true pitch black background
+const PitchDarkTheme = {
+  ...DarkTheme,
+  colors: {
+    ...DarkTheme.colors,
+    background: '#000000',
+    card: '#000000',
+    border: '#18181b',
+    text: '#ffffff',
+  },
+};
+
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
 
   return (
-    <ThemeProvider value={isDark ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={isDark ? PitchDarkTheme : DefaultTheme}>
       <TodoProvider repository={repository}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -28,16 +40,16 @@ function RootLayoutNav() {
             options={{
               title: 'New Todo',
               presentation: 'modal',
-              headerStyle: { backgroundColor: isDark ? '#0f172a' : '#ffffff' },
-              headerTintColor: isDark ? '#f8fafc' : '#0f172a',
+              headerStyle: { backgroundColor: isDark ? '#000000' : '#ffffff' },
+              headerTintColor: isDark ? '#ffffff' : '#000000',
             }}
           />
           <Stack.Screen
             name="todo/[id]"
             options={{
               title: 'Todo Details',
-              headerStyle: { backgroundColor: isDark ? '#0f172a' : '#ffffff' },
-              headerTintColor: isDark ? '#f8fafc' : '#0f172a',
+              headerStyle: { backgroundColor: isDark ? '#000000' : '#ffffff' },
+              headerTintColor: isDark ? '#ffffff' : '#000000',
             }}
           />
           <Stack.Screen name="+not-found" options={{ title: 'Not Found' }} />

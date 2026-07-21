@@ -10,12 +10,10 @@ interface InputProps extends TextInputProps {
 
 export const Input = forwardRef<TextInput, InputProps>(
   ({ label, error, helper, required, className = '', ...rest }, ref) => {
-    const inputId = label?.toLowerCase().replace(/\s+/g, '-');
-
     return (
       <View className="gap-1">
         {label && (
-          <Text className="text-sm font-medium text-slate-700 dark:text-slate-300">
+          <Text className="text-sm font-medium text-slate-700 dark:text-zinc-300">
             {label}
             {required && (
               <Text className="text-danger" accessibilityLabel="required">
@@ -30,11 +28,11 @@ export const Input = forwardRef<TextInput, InputProps>(
           accessibilityLabel={label}
           accessibilityHint={helper}
           aria-required={required}
-          placeholderTextColor="#94a3b8"
-          className={`min-h-touch bg-white dark:bg-slate-800 border rounded-xl px-4 py-3 text-base text-slate-900 dark:text-white ${
+          placeholderTextColor="#71717a"
+          className={`min-h-touch bg-white dark:bg-zinc-900 border rounded-xl px-4 py-3 text-base text-slate-900 dark:text-white ${
             error
               ? 'border-danger'
-              : 'border-slate-300 dark:border-slate-600 focus:border-brand'
+              : 'border-slate-300 dark:border-zinc-800 focus:border-slate-900 dark:focus:border-white'
           } ${className}`}
           {...rest}
         />
@@ -50,7 +48,7 @@ export const Input = forwardRef<TextInput, InputProps>(
         )}
 
         {!error && helper && (
-          <Text className="text-sm text-slate-500 dark:text-slate-400">
+          <Text className="text-sm text-slate-500 dark:text-zinc-400">
             {helper}
           </Text>
         )}

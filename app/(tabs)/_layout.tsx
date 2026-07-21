@@ -9,19 +9,19 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#7c3aed',
-        tabBarInactiveTintColor: isDark ? '#64748b' : '#94a3b8',
+        tabBarActiveTintColor: isDark ? '#ffffff' : '#000000',
+        tabBarInactiveTintColor: isDark ? '#71717a' : '#94a3b8',
         tabBarStyle: {
-          backgroundColor: isDark ? '#0f172a' : '#ffffff',
-          borderTopColor: isDark ? '#1e293b' : '#f1f5f9',
+          backgroundColor: isDark ? '#000000' : '#ffffff',
+          borderTopColor: isDark ? '#18181b' : '#e4e4e7',
           borderTopWidth: 1,
           height: 60,
           paddingBottom: 8,
         },
         headerStyle: {
-          backgroundColor: isDark ? '#0f172a' : '#ffffff',
+          backgroundColor: isDark ? '#000000' : '#ffffff',
         },
-        headerTintColor: isDark ? '#f8fafc' : '#0f172a',
+        headerTintColor: isDark ? '#ffffff' : '#000000',
         headerShadowVisible: false,
         tabBarLabelStyle: {
           fontSize: 12,

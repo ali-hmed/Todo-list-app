@@ -31,7 +31,7 @@ export function TodoListHeader({
 
   return (
     <View
-      className="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800"
+      className="bg-white dark:bg-black border-b border-slate-200 dark:border-zinc-800"
       accessibilityRole="tablist"
     >
       <View className="flex-row">
@@ -48,10 +48,10 @@ export function TodoListHeader({
             >
               <View className="flex-row items-center gap-1.5">
                 <Text
-                  className={`text-sm font-semibold ${
+                  className={`text-sm ${
                     isSelected
-                      ? 'text-brand dark:text-brand-light'
-                      : 'text-slate-500 dark:text-slate-400'
+                      ? 'text-slate-900 dark:text-white font-bold'
+                      : 'text-slate-500 dark:text-zinc-400 font-medium'
                   }`}
                 >
                   {tab.label}
@@ -59,13 +59,15 @@ export function TodoListHeader({
                 <View
                   className={`min-w-5 h-5 rounded-full items-center justify-center px-1.5 ${
                     isSelected
-                      ? 'bg-brand'
-                      : 'bg-slate-200 dark:bg-slate-700'
+                      ? 'bg-slate-900 dark:bg-white'
+                      : 'bg-slate-200 dark:bg-zinc-800'
                   }`}
                 >
                   <Text
                     className={`text-xs font-bold ${
-                      isSelected ? 'text-white' : 'text-slate-600 dark:text-slate-300'
+                      isSelected
+                        ? 'text-white dark:text-slate-950'
+                        : 'text-slate-600 dark:text-zinc-400'
                     }`}
                   >
                     {tab.count}
@@ -76,7 +78,7 @@ export function TodoListHeader({
               {/* Active indicator bar */}
               <View
                 className={`h-0.5 w-full rounded-full ${
-                  isSelected ? 'bg-brand' : 'bg-transparent'
+                  isSelected ? 'bg-slate-900 dark:bg-white' : 'bg-transparent'
                 }`}
               />
             </Pressable>
