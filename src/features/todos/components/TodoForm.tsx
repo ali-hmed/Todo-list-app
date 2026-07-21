@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  Alert,
-  Platform,
   Pressable,
   ScrollView,
   Text,
@@ -9,10 +7,9 @@ import {
 } from 'react-native';
 import { Input } from '../../../components/ui/Input';
 import { Button } from '../../../components/ui/Button';
+import { DateSelector } from '../../../components/ui/DateSelector';
 import type { TodoPriority } from '../types';
 import type { useTodoForm } from '../hooks/useTodoForm';
-import { formatDueDate, dateToISOString } from '../../../utils/dateUtils';
-import { Ionicons } from '@expo/vector-icons';
 
 type FormHook = ReturnType<typeof useTodoForm>;
 
@@ -48,50 +45,10 @@ const priorityUnselectedText: Record<TodoPriority, string> = {
 };
 
 /**
- * Shared form used by both Create Todo and Edit Todo screens.
- *
- * Due date UX:
- * - The field shows a human-readable date label (e.g., "Today", "Jul 25")
- * - Tapping it prompts the user to enter a date (YYYY-MM-DD) via Alert on Android,
- *   or a simple text input approach cross-platform.
- * - Internally dates are stored as ISO strings (YYYY-MM-DD).
- * NOTE: A native DateTimePicker (expo-datetime-picker) will be integrated in phase 2
- * to provide a full date-picker UI without manual text entry.
+ * Shared form used for creating and editing Todos.
+ * Uses DateSelector for date picking instead of text input.
  */
 export function TodoForm({ form, submitLabel, onSubmit, isSubmitting }: TodoFormProps) {
-  // Raw date text input value (YYYY-MM-DD) for the simple date entry field
-  const [dateInput, setDateInput] = useState<string>(
-    form.fields.dueDate
-      ? dateToISOString(form.fields.dueDate)
-      : ''
-  );
-  const [dateError, setDateError] = useState<string>('');
-
-  const dueDateLabel = form.fields.dueDate
-    ? formatDueDate(dateToISOString(form.fields.dueDate))
-    : '';
-
-  const handleDateChange = (text: string) => {
-    setDateInput(text);
-    setDateError('');
-    if (text === '') {
-      form.setDueDate(null);
-      return;
-    }
-    // Validate YYYY-MM-DD format
-    const match = text.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-    if (!match) {
-      setDateError('Use YYYY-MM-DD format, e.g. 2025-07-25');
-      return;
-    }
-    const date = new Date(`${text}T00:00:00`);
-    if (isNaN(date.getTime())) {
-      setDateError('Invalid date.');
-      return;
-    }
-    form.setDueDate(date);
-  };
-
   return (
     <ScrollView
       keyboardShouldPersistTaps="handled"
@@ -163,19 +120,11 @@ export function TodoForm({ form, submitLabel, onSubmit, isSubmitting }: TodoForm
           </View>
         </View>
 
-        {/* Due Date */}
-        <Input
+        {/* Due Date Selector */}
+        <DateSelector
           label="Due Date"
-          value={dateInput}
-          onChangeText={handleDateChange}
-          placeholder="YYYY-MM-DD (optional)"
-          error={dateError}
-          helper={dueDateLabel ? `→ ${dueDateLabel}` : undefined}
-          keyboardType="numeric"
-          maxLength={10}
-          returnKeyType="done"
-          accessibilityLabel="Due date"
-          accessibilityHint="Enter date as year dash month dash day, for example 2025 dash 07 dash 25"
+          value={form.fields.dueDate}
+          onChange={form.setDueDate}
         />
 
         {/* Submit */}

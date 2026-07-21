@@ -1,20 +1,20 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, KeyboardAvoidingView, Platform, Text, View } from 'react-native';
+import { Alert, KeyboardAvoidingView, Platform, Pressable, Text, View } from 'react-native';
 import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { useTodoContext } from '@/src/context/TodoContext';
 import { TodoForm } from '@/src/features/todos/components/TodoForm';
+import { TodoNoteView } from '@/src/features/todos/components/TodoNoteView';
 import { useTodoForm } from '@/src/features/todos/hooks/useTodoForm';
 import { Button } from '@/src/components/ui/Button';
-import { Badge } from '@/src/components/ui/Badge';
-import { LoadingSpinner } from '@/src/components/ui/LoadingSpinner';
 import type { CreateTodoInput, UpdateTodoInput } from '@/src/features/todos/types';
-import { formatTimestamp } from '@/src/utils/dateUtils';
 
 export default function TodoDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const navigation = useNavigation();
   const { getTodoById, updateTodo, deleteTodo, toggleTodo } = useTodoContext();
+  const [isEditing, setIsEditing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isToggling, setIsToggling] = useState(false);
@@ -36,9 +36,15 @@ export default function TodoDetailScreen() {
   // Update navigation title dynamically
   useEffect(() => {
     if (todo) {
-      navigation.setOptions({ title: todo.title.length > 30 ? todo.title.slice(0, 30) + '…' : todo.title });
+      navigation.setOptions({
+        title: isEditing
+          ? 'Edit Note'
+          : todo.title.length > 30
+          ? todo.title.slice(0, 30) + '…'
+          : todo.title,
+      });
     }
-  }, [todo?.title, navigation]);
+  }, [todo?.title, navigation, isEditing]);
 
   const handleSave = useCallback(async () => {
     if (!todo) return;
@@ -58,9 +64,9 @@ export default function TodoDetailScreen() {
         return;
       }
 
-      router.back();
+      setIsEditing(false);
     });
-  }, [todo, form, updateTodo, router]);
+  }, [todo, form, updateTodo]);
 
   const handleToggle = useCallback(async () => {
     if (!todo) return;
@@ -116,40 +122,41 @@ export default function TodoDetailScreen() {
       className="flex-1"
       keyboardVerticalOffset={Platform.OS === 'ios' ? 88 : 0}
     >
-      {/* Status & metadata bar */}
-      <View className="flex-row items-center gap-3 px-4 py-3 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800">
-        <Badge variant="status" completed={todo.completed} />
-        <Text className="text-xs text-slate-400 dark:text-slate-500 flex-1">
-          Created {formatTimestamp(todo.createdAt)}
-        </Text>
+      {isEditing ? (
+        <View className="flex-1 bg-slate-50 dark:bg-slate-950">
+          <View className="flex-row items-center justify-between px-4 py-3 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800">
+            <Pressable
+              onPress={() => setIsEditing(false)}
+              className="flex-row items-center gap-1.5"
+            >
+              <Ionicons name="arrow-back" size={18} color="#64748b" />
+              <Text className="text-sm font-medium text-slate-600 dark:text-slate-300">
+                Cancel Editing
+              </Text>
+            </Pressable>
 
-        {/* Toggle button */}
-        <Button
-          label={todo.completed ? 'Mark Active' : 'Mark Done'}
-          onPress={handleToggle}
-          variant={todo.completed ? 'secondary' : 'primary'}
-          size="sm"
-          loading={isToggling}
-          accessibilityLabel={todo.completed ? 'Mark this todo as active' : 'Mark this todo as done'}
+            <Text className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+              Edit Mode
+            </Text>
+          </View>
+
+          <TodoForm
+            form={form}
+            submitLabel="Save Note Changes"
+            onSubmit={handleSave}
+            isSubmitting={isSubmitting}
+          />
+        </View>
+      ) : (
+        <TodoNoteView
+          todo={todo}
+          onEditPress={() => setIsEditing(true)}
+          onTogglePress={handleToggle}
+          onDeletePress={handleDelete}
+          isToggling={isToggling}
+          isDeleting={isDeleting}
         />
-
-        {/* Delete button */}
-        <Button
-          label="Delete"
-          onPress={handleDelete}
-          variant="danger"
-          size="sm"
-          loading={isDeleting}
-          accessibilityLabel="Delete this todo"
-        />
-      </View>
-
-      <TodoForm
-        form={form}
-        submitLabel="Save Changes"
-        onSubmit={handleSave}
-        isSubmitting={isSubmitting}
-      />
+      )}
     </KeyboardAvoidingView>
   );
 }
