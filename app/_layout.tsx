@@ -6,13 +6,14 @@ import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { TodoProvider } from '@/src/context/TodoContext';
 import { ThemeProvider as AppThemeProvider } from '@/src/context/ThemeContext';
-import { InMemoryTodoRepository } from '@/src/repository/InMemoryTodoRepository';
+import { AsyncStorageTodoRepository } from '@/src/repository/AsyncStorageTodoRepository';
 
 export const unstable_settings = {
   anchor: '(tabs)',
 };
 
-const repository = new InMemoryTodoRepository();
+// Persistent on-device storage instance
+const repository = new AsyncStorageTodoRepository();
 
 // Custom Dark navigation theme with true pitch black background
 const PitchDarkTheme = {

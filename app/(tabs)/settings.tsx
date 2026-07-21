@@ -3,12 +3,14 @@ import { Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import Constants from 'expo-constants';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme, type ThemeMode } from '@/src/context/ThemeContext';
+import { useTodoContext } from '@/src/context/TodoContext';
 
 export default function SettingsScreen() {
   const appVersion = Constants.expoConfig?.version ?? '1.0.0';
   const expoSdkVersion = Constants.expoConfig?.sdkVersion ?? 'SDK 54';
 
   const { themeMode, setThemeMode, colorScheme } = useTheme();
+  const { totalCount, activeCount, completedCount } = useTodoContext();
   const isDark = colorScheme === 'dark';
 
   const themeOptions: Array<{ mode: ThemeMode; label: string; icon: keyof typeof Ionicons.glyphMap }> = [
@@ -71,6 +73,28 @@ export default function SettingsScreen() {
           </View>
         </View>
 
+        {/* Data Storage */}
+        <View className="bg-white dark:bg-zinc-950 rounded-2xl p-4 border border-slate-200 dark:border-zinc-800 gap-3">
+          <Text className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-500">
+            Data Storage
+          </Text>
+          <View className="gap-1 mb-1">
+            <Text className="text-base font-semibold text-slate-900 dark:text-white">
+              On-Device Storage
+            </Text>
+            <Text className="text-sm text-slate-500 dark:text-zinc-400">
+              Your todos are safely saved locally on this device using AsyncStorage and persist automatically across app restarts.
+            </Text>
+          </View>
+
+          <InfoRow label="Storage Engine" value="AsyncStorage (Local)" />
+          <InfoRow label="Status" value="Active & Persistent" />
+          <InfoRow
+            label="Stored Items"
+            value={`${totalCount} todo${totalCount !== 1 ? 's' : ''} (${activeCount} active, ${completedCount} done)`}
+          />
+        </View>
+
         {/* App Info */}
         <View className="bg-white dark:bg-zinc-950 rounded-2xl p-4 border border-slate-200 dark:border-zinc-800 gap-3">
           <Text className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-500">
@@ -79,21 +103,6 @@ export default function SettingsScreen() {
           <InfoRow label="App Version" value={`v${appVersion}`} />
           <InfoRow label="Built with" value={`Expo ${expoSdkVersion}`} />
           <InfoRow label="Framework" value="React Native + Expo Router" />
-        </View>
-
-        {/* Data Storage */}
-        <View className="bg-white dark:bg-zinc-950 rounded-2xl p-4 border border-slate-200 dark:border-zinc-800 gap-3">
-          <Text className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-500">
-            Data Storage
-          </Text>
-          <View className="gap-1">
-            <Text className="text-base font-medium text-slate-900 dark:text-white">
-              Local storage
-            </Text>
-            <Text className="text-sm text-slate-500 dark:text-zinc-400">
-              Todos are currently stored in memory and will reset when the app is closed.
-            </Text>
-          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
